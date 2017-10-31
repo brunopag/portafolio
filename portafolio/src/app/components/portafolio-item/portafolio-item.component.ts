@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ProductosService } from '../../services/productos.service';
 
 @Component({
   selector: 'app-portafolio-item',
@@ -7,9 +8,18 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PortafolioItemComponent {
 
-  constructor( private route:ActivatedRoute ) {
+  producto:any;
+  prod_id:any;
+
+  constructor( private route:ActivatedRoute,
+               private _productosService:ProductosService) {
     route.params.subscribe(parametros => {
-      console.log(parametros['id']);
+      this.prod_id = parametros['id'];
+      _productosService.getProducto(parametros['id'])
+        .subscribe(prod => {
+          this.producto = prod.json();
+          console.log(this.producto);
+        });
     })
   }
 
